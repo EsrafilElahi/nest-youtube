@@ -7,8 +7,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 @Module({
   imports: [
     ConfigModule.forRoot(),
-    TypeOrmModule.forRootAsync({ // for all pages applied
-      // inject: [databaseConfig], ----> test this, work? or not?
+    // for all pages applied
+    TypeOrmModule.forRootAsync({
+      inject: [ConfigService],
       useFactory: (configServer: ConfigService) => databaseConfig(configServer),
     }),
   ],
