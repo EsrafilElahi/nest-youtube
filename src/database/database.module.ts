@@ -1,9 +1,16 @@
 /* eslint-disable prettier/prettier */
 import { Module } from '@nestjs/common';
-import { databaseProviders } from './database.providers';
+import { databaseConfig } from './database.providers';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
-  providers: [...databaseProviders],
-  exports: [...databaseProviders],
+  imports: [
+    ConfigModule.forRoot(),
+    TypeOrmModule.forRootAsync({
+      // inject: [databaseConfig], ----> test this, work? or not?
+      useFactory: (configServer: ConfigService) => databaseConfig(configServer),
+    }),
+  ],
 })
 export class DatabaseModule {}
