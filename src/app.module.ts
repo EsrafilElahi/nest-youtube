@@ -1,13 +1,13 @@
+/* eslint-disable prettier/prettier */
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { Database } from './database/database';
-import { DatabaseController } from './database/database.controller';
 import { DatabaseModule } from './database/database.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [DatabaseModule],
-  controllers: [AppController, DatabaseController],
-  providers: [AppService, Database],
+  imports: [ConfigModule.forRoot(), DatabaseModule],
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule {}
