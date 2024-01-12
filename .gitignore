@@ -35,4 +35,4 @@ lerna-debug.log*
 !.vscode/extensions.json
 
 # sw files
-*.sw.ts
+*.swp
