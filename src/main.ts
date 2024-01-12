@@ -4,6 +4,13 @@ import { AppModule } from './app.module';
 import * as cookieParser from 'cookie-parser';
 import { ConfigService } from '@nestjs/config';
 
+// use this to hanlde errors
+
+// throw new HttpException(
+//   'An account with that email already exists!',
+//   HttpStatus.CONFLICT,
+// );
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const configService = app.get(ConfigService);
