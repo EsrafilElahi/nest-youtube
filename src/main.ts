@@ -12,7 +12,7 @@ import { ConfigService } from '@nestjs/config';
 // );
 
 // exports: [UserService], ---> must be export to use it into other modules directly
-
+// or put UserService to Providers array where you want use
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
