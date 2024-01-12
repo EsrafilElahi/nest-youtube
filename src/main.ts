@@ -14,6 +14,21 @@ import { ConfigService } from '@nestjs/config';
 // exports: [UserService], ---> must be export to use it into other modules directly
 // or put UserService to Providers array where you want use
 
+// every module like products ---> TypeOrmModule.forFeature([Product, BoughtProducts]),
+// try this too ---> entities: [User, Product, UserLikes, BoughtProducts],
+
+// ___ custom decorator ___ ---> for get userId doesn't need to pass userId from frontend
+// import { ExecutionContext } from "@nestjs/common";
+// import { createParamDecorator } from "@nestjs/common/decorators"
+// import { User } from "src/database/entities/user/user.entity"
+
+// export const ExtractUser = createParamDecorator((data, ctx: ExecutionContext) : User => {
+//     const req = ctx.switchToHttp().getRequest();
+//     return req.user;
+// });
+
+
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const configService = app.get(ConfigService);
