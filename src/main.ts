@@ -1,6 +1,7 @@
 /* eslint-disable prettier/prettier */
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
+import * as cookieParser from 'cookie-parser';
 import { ConfigService } from '@nestjs/config';
 
 async function bootstrap() {
@@ -9,6 +10,8 @@ async function bootstrap() {
 
   const FRONTEND_URL = configService.get<string>('FRONTEND_URL');
   const PORT = configService.get<number>('PORT');
+
+  app.use(cookieParser());
 
   app.setGlobalPrefix('api');
   // app.select(DatabaseModule).init();
