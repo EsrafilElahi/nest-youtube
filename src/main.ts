@@ -11,6 +11,9 @@ import { ConfigService } from '@nestjs/config';
 //   HttpStatus.CONFLICT,
 // );
 
+// exports: [UserService], ---> must be export to use it into other modules directly
+
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const configService = app.get(ConfigService);
