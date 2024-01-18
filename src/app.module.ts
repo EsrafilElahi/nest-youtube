@@ -1,7 +1,8 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 //* NESTJS
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-// import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
+import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 
 //* SERVICES
 import { AppController } from './app.controller';

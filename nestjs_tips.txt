@@ -2,6 +2,10 @@
 // * ---> if you use the service => import it in providers[]
 // * ---> if you use the module => import it in imports[]
 
+forRoot / forRootAsync: configure a module one time. This is either for a global service, or a re-used configuration internally
+forFeature / forFeatureAsync: make use of the configuration from forRoot/forRootAsync for a specific provider. This usually creates an injection token.
+register / registerAsync: a module that can be registered multiple times with different configurations each time.
+
 // use this to hanlde errors
 // throw new HttpException(
 //   'An account with that email already exists!',
