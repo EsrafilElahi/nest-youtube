@@ -10,6 +10,9 @@ import * as cookieParser from 'cookie-parser';
 //* SERVICEs
 import { AppModule } from './app.module';
 
+// * ---> if you use the service => import it in providers[]
+// * ---> if you use the module => import it in imports[]
+
 // use this to hanlde errors
 
 // throw new HttpException(
