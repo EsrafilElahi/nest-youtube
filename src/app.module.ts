@@ -7,7 +7,7 @@ import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 //* SERVICES
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { DatabaseModule } from './database/database.module';
+import { DatabaseModule } from './modules/database/database.module';
 
 @Module({
   imports: [
