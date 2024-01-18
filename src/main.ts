@@ -1,9 +1,14 @@
 /* eslint-disable prettier/prettier */
+//* NESTJS
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
-import * as cookieParser from 'cookie-parser';
 import { ConfigService } from '@nestjs/config';
 import { ValidationPipe } from '@nestjs/common';
+
+//* LIBRARY
+import * as cookieParser from 'cookie-parser';
+
+//* SERVICEs
+import { AppModule } from './app.module';
 
 // use this to hanlde errors
 
