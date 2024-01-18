@@ -1,7 +1,7 @@
 import { IsEmail, IsEnum, IsNotEmpty, IsString, MinLength } from 'class-validator';
 import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn } from 'typeorm';
 import { Role } from 'src/interface/interfaces';
-import { ProfileEntity } from './ProfileEntity';
+import { ProfileEntity } from './Profile.entity';
 
 @Entity()
 export class AuthEntity {

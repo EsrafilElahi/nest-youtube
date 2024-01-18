@@ -1,7 +1,10 @@
+//* NESTJS
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { AuthEntity } from 'src/entities/AuthEntity';
 import { Repository } from 'typeorm';
+
+//* SERVICES
+import { AuthEntity } from 'src/entities/Auth.entity';
 import { CreateUserDto } from './auth.dto';
 
 @Injectable()
