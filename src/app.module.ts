@@ -19,19 +19,21 @@ import { DatabaseModule } from './database/database.module';
   ],
   controllers: [AppController],
 
+  providers: [AppService],
+
   // how about jwt guard
-  providers: [
-    AppService,
-    {
-      provide: APP_INTERCEPTOR,
-      // useClass: ClassSerializerInterceptor,
-      useClass: UserInterceptor,
-    },
-    {
-      provide: APP_GUARD,
-      useClass: AuthGuard,
-    },
-  ],
+  // providers: [
+  //   AppService,
+  //   {
+  //     provide: APP_INTERCEPTOR,
+  //     // useClass: ClassSerializerInterceptor,
+  //     useClass: UserInterceptor,
+  //   },
+  //   {
+  //     provide: APP_GUARD,
+  //     useClass: AuthGuard,
+  //   },
+  // ],
 })
 export class AppModule {}
 
