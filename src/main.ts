@@ -3,6 +3,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import * as cookieParser from 'cookie-parser';
 import { ConfigService } from '@nestjs/config';
+import { ValidationPipe } from '@nestjs/common';
 
 // use this to hanlde errors
 
@@ -58,6 +59,13 @@ async function bootstrap() {
     methods: 'GET, PUT, POST, DELETE',
     credentials: true,
   });
+
+  app.useGlobalPipes(
+    new ValidationPipe({
+      forbidNonWhitelisted: true,
+      transform: true, // convert data automatically
+    }),
+  );
 
   await app.listen(PORT);
 }
