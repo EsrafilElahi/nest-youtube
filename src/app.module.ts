@@ -5,6 +5,8 @@ import { ConfigModule } from '@nestjs/config';
 import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 
 //* SERVICES
+import { AuthModule } from './modules/auth/auth.module';
+import { ProfileModule } from './modules/profile/profile.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { DatabaseModule } from './modules/database/database.module';
@@ -16,6 +18,8 @@ import { DatabaseModule } from './modules/database/database.module';
       envFilePath: ['.env.development', '.env'], // Adjust for different environments
     }),
     DatabaseModule,
+    ProfileModule,
+    AuthModule,
   ],
   controllers: [AppController],
 
