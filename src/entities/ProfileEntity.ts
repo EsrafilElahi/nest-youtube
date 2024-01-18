@@ -1,16 +1,16 @@
 import { IsEmail, IsEnum, IsNotEmpty, IsNumber, IsString, Length, MinLength } from 'class-validator';
 import { Entity, Column, PrimaryGeneratedColumn, OneToOne } from 'typeorm';
-import { Auth } from './AuthEntity';
+import { AuthEntity } from './AuthEntity';
 
 @Entity()
-export class Profile {
+export class ProfileEntity {
   @Column()
   @PrimaryGeneratedColumn()
   profileId: string;
 
   @Column()
-  @OneToOne(() => Auth, (auth) => auth.profile)
-  auth: Auth;
+  @OneToOne(() => AuthEntity, (auth) => auth.profile)
+  auth: AuthEntity;
 
   @Column()
   @IsString()
