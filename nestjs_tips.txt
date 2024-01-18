@@ -1,19 +1,15 @@
-//* NESTJS
-import { NestFactory } from '@nestjs/core';
-import { ConfigService } from '@nestjs/config';
-import { ValidationPipe } from '@nestjs/common';
 
-//* LIBRARY
-import * as cookieParser from 'cookie-parser';
-
-//* SERVICES
-import { AppModule } from './app.module';
+// * ---> if you use the service => import it in providers[]
+// * ---> if you use the module => import it in imports[]
 
 // use this to hanlde errors
 // throw new HttpException(
 //   'An account with that email already exists!',
 //   HttpStatus.CONFLICT,
 // );
+
+// exports: [UserService], ---> must be export to use it into other modules directly
+// or put UserService to Providers array where you want use
 
 // specify modue, every module like products ---> TypeOrmModule.forFeature([Product, BoughtProducts]),
 // all of modules try this too ---> entities: [User, Product, UserLikes, BoughtProducts],
@@ -41,32 +37,16 @@ import { AppModule } from './app.module';
 //   }
 // }
 
-async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
-  const configService = app.get(ConfigService);
 
-  const FRONTEND_URL = configService.get<string>('FRONTEND_URL');
-  const PORT = configService.get<number>('PORT');
-
-  app.use(cookieParser());
-
-  app.setGlobalPrefix('api');
-  // app.select(DatabaseModule).init();
-
-  app.enableCors({
-    origin: FRONTEND_URL,
-    allowedHeaders: 'Content-Type, Authorization',
-    methods: 'GET, PUT, POST, DELETE',
-    credentials: true,
-  });
-
-  app.useGlobalPipes(
-    new ValidationPipe({
-      forbidNonWhitelisted: true,
-      transform: true, // convert data automatically
-    }),
-  );
-
-  await app.listen(PORT);
-}
-bootstrap();
+// providers: [
+//   AppService,
+//   {
+//     provide: APP_INTERCEPTOR,
+//     // useClass: ClassSerializerInterceptor,
+//     useClass: UserInterceptor,
+//   },
+//   {
+//     provide: APP_GUARD,
+//     useClass: AuthGuard,
+//   },
+// ],
