@@ -1,4 +1,4 @@
-/* eslint-disable prettier/prettier */
+
 //* NESTJS
 import { NestFactory } from '@nestjs/core';
 import { ConfigService } from '@nestjs/config';

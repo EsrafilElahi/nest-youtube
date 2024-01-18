@@ -1,4 +1,4 @@
-/* eslint-disable prettier/prettier */
+
 import { Global, Module } from '@nestjs/common';
 import { databaseConfig } from './database.providers';
 import { ConfigModule, ConfigService } from '@nestjs/config';
