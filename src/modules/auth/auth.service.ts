@@ -15,7 +15,7 @@ export class AuthService {
     return this.authRepository.find();
   }
 
-  async findUserById(id: number) {
+  async findUserById(id: number): Promise<AuthEntity> {
     const user = await this.authRepository.findOne({ where: { userId: id } });
     if (!user) {
       throw new HttpException('user not found!', HttpStatus.NOT_FOUND);
@@ -24,7 +24,7 @@ export class AuthService {
     }
   }
 
-  async createUser(userDto: CreateUserDto) {
+  async createUser(userDto: CreateUserDto): Promise<AuthEntity[]> {
     if (!userDto) {
       throw new HttpException('user data not found!', HttpStatus.BAD_REQUEST);
     }
@@ -35,7 +35,7 @@ export class AuthService {
     return allUsers;
   }
 
-  async updateUser(id: number, userDto: CreateUserDto) {
+  async updateUser(id: number, userDto: CreateUserDto): Promise<AuthEntity> {
     if (!userDto) {
       throw new HttpException('user data not found!', HttpStatus.BAD_REQUEST);
     }
