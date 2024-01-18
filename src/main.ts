@@ -9,38 +9,6 @@ import * as cookieParser from 'cookie-parser';
 //* SERVICES
 import { AppModule } from './app.module';
 
-// use this to hanlde errors
-// throw new HttpException(
-//   'An account with that email already exists!',
-//   HttpStatus.CONFLICT,
-// );
-
-// specify modue, every module like products ---> TypeOrmModule.forFeature([Product, BoughtProducts]),
-// all of modules try this too ---> entities: [User, Product, UserLikes, BoughtProducts],
-
-// ___ custom decorator ___ ---> for get userId doesn't need to pass userId from frontend
-// import { ExecutionContext } from "@nestjs/common";
-// import { createParamDecorator } from "@nestjs/common/decorators"
-// import { User } from "src/database/entities/user/user.entity"
-
-// export const ExtractUser = createParamDecorator((data, ctx: ExecutionContext) : User => {
-//     const req = ctx.switchToHttp().getRequest();
-//     return req.user;
-// });
-
-// custom exception
-// import { Injectable, NotFoundException } from '@nestjs/common';
-// import { User } from '@prisma/client';
-
-// @Injectable()
-// export class UserException {
-//   public userNotFound(user: User) {
-//     if (!user) {
-//       throw new NotFoundException('유저를 찾을 수 없습니다.');
-//     }
-//   }
-// }
-
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const configService = app.get(ConfigService);
@@ -51,12 +19,11 @@ async function bootstrap() {
   app.use(cookieParser());
 
   app.setGlobalPrefix('api');
-  // app.select(DatabaseModule).init();
 
   app.enableCors({
     origin: FRONTEND_URL,
     allowedHeaders: 'Content-Type, Authorization',
-    methods: 'GET, PUT, POST, DELETE',
+    methods: 'GET, PUT, POST, PATCH, DELETE',
     credentials: true,
   });
 
