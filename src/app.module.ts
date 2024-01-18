@@ -19,6 +19,7 @@ import { DatabaseModule } from './database/database.module';
   ],
   controllers: [AppController],
 
+  // how about jwt guard
   providers: [
     AppService,
     {
