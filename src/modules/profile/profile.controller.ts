@@ -1,5 +1,5 @@
 //* NESTJS
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Put } from '@nestjs/common';
 
 //* SERVICES
 import { ProfileService } from './profile.service';
@@ -24,7 +24,7 @@ export class ProfileController {
     return this.profileService.createProfile(profileDto);
   }
 
-  @Put('/:id/edit')
+  @Patch('/:id/edit')
   updateProfile(@Param('id') id: number, @Body() profileDto: ProfileDto) {
     return this.profileService.updateProfile(id, profileDto);
   }
