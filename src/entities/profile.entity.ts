@@ -1,7 +1,8 @@
-import { IsNotEmpty, IsNumber, IsString, Length } from 'class-validator';
+import { IsEnum, IsNotEmpty, IsNumber, IsString, Length } from 'class-validator';
 import { Entity, Column, OneToOne } from 'typeorm';
 import { AuthEntity } from './auth.entity';
 import { AbstractEntity } from './abstract.entity';
+import { Role } from 'src/interface/interfaces';
 
 @Entity()
 export class ProfileEntity extends AbstractEntity {
@@ -38,4 +39,8 @@ export class ProfileEntity extends AbstractEntity {
   @Column()
   @IsString()
   avatar: string;
+
+  @Column()
+  @IsEnum(Role)
+  role: Role;
 }

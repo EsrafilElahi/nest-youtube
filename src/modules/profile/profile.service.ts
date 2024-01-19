@@ -2,6 +2,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ProfileEntity } from 'src/entities/profile.entity';
 import { Repository } from 'typeorm';
+import { ProfileDto } from './profile.dto';
 
 @Injectable()
 export class ProfileService {
@@ -10,7 +11,19 @@ export class ProfileService {
     private profileRepository: Repository<ProfileEntity>,
   ) {}
 
-  async getProfile(id: number) {
+  async getProfiles() {
+    const profiles = await this.profileRepository.find({ relations: { auth: true } });
+
+    const count = await this.profileRepository.count();
+
+    if (profiles) {
+      throw new HttpException('profiles not found!', HttpStatus.NOT_FOUND);
+    }
+
+    return { count, profiles };
+  }
+
+  async getProfileById(id: number) {
     const foundProfile = await this.profileRepository.findOne({ where: { id: id }, relations: { auth: true } });
 
     if (!foundProfile) {
@@ -20,25 +33,43 @@ export class ProfileService {
     return foundProfile;
   }
 
-  async createProfile(profileData: Partial<ProfileEntity>) {
-    const profile = this.profileRepository.create(profileData);
-    return await this.profileRepository.save(profile);
+  async createProfile(profileDto: Partial<ProfileDto>) {
+    if (!profileDto) {
+      throw new HttpException('user data not found!', HttpStatus.BAD_REQUEST);
+    }
+
+    const createProfile = this.profileRepository.create(profileDto);
+    return await this.profileRepository.save(createProfile);
   }
 
-  async updateProfile(profileId: number, profileData: Partial<ProfileEntity>) {
-    await this.profileRepository.update(profileId, profileData);
-    return this.profileRepository.findOne(profileId);
+  async updateProfile(profileId: number, profileDto: Partial<ProfileDto>) {
+    if (!profileDto) {
+      throw new HttpException('profile data not found!', HttpStatus.BAD_REQUEST);
+    }
+
+    const profileFound = await this.profileRepository.findOne({ where: { id: profileId } });
+
+    if (!profileFound) {
+      throw new HttpException('profile not found!', HttpStatus.NOT_FOUND);
+    }
+
+    // partial updates with save method
+    const upatedProfile = await this.profileRepository.save(profileDto);
+    // const upatedProfile = await this.authRepository.update(id, userDto);
+    return upatedProfile;
   }
 
-  async editProfile(profileId: number, profileData: Partial<ProfileEntity>) {
-    return this.updateProfile(profileId, profileData);
-  }
+  async deleteProfile(profileId: number) {
+    if (!profileId) {
+      throw new HttpException('profile id not found!', HttpStatus.BAD_REQUEST);
+    }
 
-  async deleteProfile(profileId: number): Promise<void> {
+    const profileFound = await this.profileRepository.findOne({ where: { id: profileId } });
+    if (!profileFound) {
+      throw new HttpException('profile not found in database!', HttpStatus.NOT_FOUND);
+    }
+
     await this.profileRepository.delete(profileId);
-  }
-
-  async getProfiles(): Promise<ProfileEntity[]> {
-    return this.profileRepository.find();
+    return { message: 'delete profile successfully', deletedProfile: profileFound };
   }
 }
