@@ -42,15 +42,15 @@ export class ProfileService {
       throw new HttpException('profile data not found!', HttpStatus.BAD_REQUEST);
     }
 
-    const profileFound = await this.profileRepository.findOne({ where: { id: profileId } });
+    const profileFound = await this.profileRepository.findOne({ where: { id: profileId }, relations: { auth: true } });
 
     if (!profileFound) {
       throw new HttpException('profile not found!', HttpStatus.NOT_FOUND);
     }
 
-    // partial updates with save method
-    const upatedProfile = await this.profileRepository.save(profileDto);
-    // const upatedProfile = await this.authRepository.update(id, userDto);
+    this.profileRepository.merge(profileFound, profileDto);
+
+    const upatedProfile = await this.profileRepository.save(profileFound);
     return upatedProfile;
   }
 
@@ -59,7 +59,7 @@ export class ProfileService {
       throw new HttpException('profile id not found!', HttpStatus.BAD_REQUEST);
     }
 
-    const profileFound = await this.profileRepository.findOne({ where: { id: profileId } });
+    const profileFound = await this.profileRepository.findOne({ where: { id: profileId }, relations: { auth: true } });
     if (!profileFound) {
       throw new HttpException('profile not found in database!', HttpStatus.NOT_FOUND);
     }
