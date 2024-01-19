@@ -14,8 +14,11 @@ export class AuthService {
     private authRepository: Repository<AuthEntity>,
   ) {}
 
-  async findAllUsers(): Promise<AuthEntity[]> {
-    return this.authRepository.find();
+  async findAllUsers() {
+    const users = await this.authRepository.find();
+    const count = await this.authRepository.count();
+
+    return { count, users };
   }
 
   async findUserById(id: number): Promise<AuthEntity> {
@@ -27,7 +30,7 @@ export class AuthService {
     }
   }
 
-  async createUser(userDto: CreateUserDto): Promise<AuthEntity[]> {
+  async createUser(userDto: CreateUserDto) {
     if (!userDto) {
       throw new HttpException('user data not found!', HttpStatus.BAD_REQUEST);
     }
@@ -64,7 +67,7 @@ export class AuthService {
       throw new HttpException('user not found in database!', HttpStatus.NOT_FOUND);
     }
 
-    const deletedUser = await this.authRepository.delete(id);
-    return { message: 'delete user successfully', deletedUser };
+    await this.authRepository.delete(id);
+    return { message: 'delete user successfully', deletedUser: userFound };
   }
 }

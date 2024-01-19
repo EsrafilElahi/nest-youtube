@@ -23,12 +23,12 @@ export class AuthController {
     return this.authService.createUser(userDto);
   }
 
-  @Put(':id')
+  @Put('/edit/:id')
   updateUser(@Param('id') id: number, @Body() userDto: CreateUserDto) {
     return this.authService.updateUser(id, userDto);
   }
 
-  @Delete(':id')
+  @Delete('/delete/:id')
   deleteUser(@Param('id') id: number) {
     return this.authService.deleteUser(id);
   }
