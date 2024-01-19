@@ -30,7 +30,7 @@ export class AuthService {
     }
   }
 
-  async createUser(userDto: CreateUserDto) {
+  async createUser(userDto: Partial<CreateUserDto>) {
     if (!userDto) {
       throw new HttpException('user data not found!', HttpStatus.BAD_REQUEST);
     }
@@ -41,7 +41,7 @@ export class AuthService {
     return allUsers;
   }
 
-  async updateUser(id: number, userDto: CreateUserDto): Promise<AuthEntity> {
+  async updateUser(id: number, userDto: Partial<CreateUserDto>): Promise<AuthEntity> {
     if (!userDto) {
       throw new HttpException('user data not found!', HttpStatus.BAD_REQUEST);
     }
