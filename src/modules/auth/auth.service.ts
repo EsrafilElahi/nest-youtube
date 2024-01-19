@@ -37,8 +37,9 @@ export class AuthService {
 
     const createdUser = await this.authRepository.create(userDto);
     await this.authRepository.save(createdUser);
-    const allUsers = await this.authRepository.find();
-    return allUsers;
+    const allUsers = await this.authRepository.find({ select: { id: true, email: true, role: true }, relations: ['profile'] });
+    const count = await this.authRepository.count();
+    return { count, allUsers };
   }
 
   async updateUser(id: number, userDto: Partial<CreateUserDto>): Promise<AuthEntity> {

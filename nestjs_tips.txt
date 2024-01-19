@@ -54,3 +54,16 @@ register / registerAsync: a module that can be registered multiple times with di
 //     useClass: AuthGuard,
 //   },
 // ],
+
+
+
+{
+    "firstName":"karzar44",
+    "lastName":"cunner44",
+    "phone": "09106850027",
+    "bio": "scrum dev",
+    "address":"tehran",
+    "job":"IT",
+    "avatar": "avatar 2",
+    "role": "user"
+}

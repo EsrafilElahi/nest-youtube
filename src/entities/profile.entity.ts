@@ -1,12 +1,12 @@
 import { IsEnum, IsNotEmpty, IsString, MaxLength, MinLength } from 'class-validator';
-import { Entity, Column, OneToOne } from 'typeorm';
+import { Entity, Column, OneToOne, JoinColumn } from 'typeorm';
 import { AuthEntity } from './auth.entity';
 import { AbstractEntity } from './abstract.entity';
 import { Role } from 'src/interface/interfaces';
 
 @Entity()
 export class ProfileEntity extends AbstractEntity {
-  @OneToOne(() => AuthEntity, (auth) => auth.profile)
+  @OneToOne(() => AuthEntity, (auth) => auth.profile, { cascade: true })
   auth: AuthEntity;
 
   @Column()

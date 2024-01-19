@@ -3,12 +3,16 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { ProfileEntity } from 'src/entities/profile.entity';
 import { Repository } from 'typeorm';
 import { ProfileDto } from './profile.dto';
+import { AuthEntity } from 'src/entities/auth.entity';
 
 @Injectable()
 export class ProfileService {
   constructor(
     @InjectRepository(ProfileEntity)
     private profileRepository: Repository<ProfileEntity>,
+
+    @InjectRepository(AuthEntity)
+    private aurhRepository: Repository<AuthEntity>,
   ) {}
 
   async getProfiles() {
@@ -28,12 +32,21 @@ export class ProfileService {
     return foundProfile;
   }
 
-  async createProfile(profileDto: Partial<ProfileDto>) {
-    if (!profileDto) {
-      throw new HttpException('user data not found!', HttpStatus.BAD_REQUEST);
+  async createProfile(userId: number, profileDto: Partial<ProfileDto>) {
+    if (!profileDto || !userId) {
+      throw new HttpException('user data or id not found!', HttpStatus.BAD_REQUEST);
     }
 
     const createProfile = this.profileRepository.create(profileDto);
+
+    // hanlde one-to-one relation
+    const userRelated = await this.aurhRepository.findOne({ where: { id: userId }, select: { id: true, email: true, password: true, role: true } });
+    if (!userRelated) {
+      throw new HttpException('profile-user not found!', HttpStatus.NOT_FOUND);
+    }
+
+    createProfile.auth = userRelated;
+
     return await this.profileRepository.save(createProfile);
   }
 
@@ -43,10 +56,13 @@ export class ProfileService {
     }
 
     const profileFound = await this.profileRepository.findOne({ where: { id: profileId }, relations: ['auth'] });
+    const userRelated = await this.aurhRepository.findOne({ where: { id: profileId }, select: { id: true, email: true, password: true, role: true } });
 
-    if (!profileFound) {
-      throw new HttpException('profile not found!', HttpStatus.NOT_FOUND);
+    if (!profileFound || !userRelated) {
+      throw new HttpException('profile-user not found!', HttpStatus.NOT_FOUND);
     }
+
+    profileFound.auth = userRelated;
 
     this.profileRepository.merge(profileFound, profileDto);
 

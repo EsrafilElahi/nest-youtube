@@ -19,13 +19,13 @@ export class ProfileController {
     return this.profileService.getProfileById(id);
   }
 
-  @Post()
-  createProfile(@Body() profileDto: ProfileDto) {
-    return this.profileService.createProfile(profileDto);
+  @Post(':id')
+  createProfile(@Param('id') id: number, @Body() profileDto: Partial<ProfileDto>) {
+    return this.profileService.createProfile(id, profileDto);
   }
 
   @Patch('/:id/edit')
-  updateProfile(@Param('id') id: number, @Body() profileDto: ProfileDto) {
+  updateProfile(@Param('id') id: number, @Body() profileDto: Partial<ProfileDto>) {
     return this.profileService.updateProfile(id, profileDto);
   }
 
