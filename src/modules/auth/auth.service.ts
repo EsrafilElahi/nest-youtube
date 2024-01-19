@@ -15,14 +15,14 @@ export class AuthService {
   ) {}
 
   async findAllUsers() {
-    const users = await this.authRepository.find({ relations: { profile: true } });
+    const users = await this.authRepository.find({ relations: ['profile'] });
     const count = await this.authRepository.count();
 
     return { count, users };
   }
 
   async findUserById(id: number): Promise<AuthEntity> {
-    const user = await this.authRepository.findOne({ where: { id: id }, relations: { profile: true } });
+    const user = await this.authRepository.findOne({ where: { id: id }, relations: ['profile'] });
     if (!user) {
       throw new HttpException('user not found!', HttpStatus.NOT_FOUND);
     } else {

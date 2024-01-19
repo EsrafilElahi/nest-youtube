@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ProfileEntity } from 'src/entities/profile.entity';
-import { DataSource, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { ProfileDto } from './profile.dto';
 
 @Injectable()
@@ -12,14 +12,14 @@ export class ProfileService {
   ) {}
 
   async getProfiles() {
-    const profiles = await this.profileRepository.find({ relations: { auth: true } });
+    const profiles = await this.profileRepository.find({ relations: ['auth'] });
 
     const count = await this.profileRepository.count();
     return { count, profiles };
   }
 
   async getProfileById(id: number) {
-    const foundProfile = await this.profileRepository.findOne({ where: { id: id }, relations: { auth: true } });
+    const foundProfile = await this.profileRepository.findOne({ where: { id: id }, relations: ['auth'] });
 
     if (!foundProfile) {
       throw new HttpException('user not found!', HttpStatus.NOT_FOUND);
@@ -42,7 +42,7 @@ export class ProfileService {
       throw new HttpException('profile data not found!', HttpStatus.BAD_REQUEST);
     }
 
-    const profileFound = await this.profileRepository.findOne({ where: { id: profileId }, relations: { auth: true } });
+    const profileFound = await this.profileRepository.findOne({ where: { id: profileId }, relations: ['auth'] });
 
     if (!profileFound) {
       throw new HttpException('profile not found!', HttpStatus.NOT_FOUND);
@@ -59,7 +59,7 @@ export class ProfileService {
       throw new HttpException('profile id not found!', HttpStatus.BAD_REQUEST);
     }
 
-    const profileFound = await this.profileRepository.findOne({ where: { id: profileId }, relations: { auth: true } });
+    const profileFound = await this.profileRepository.findOne({ where: { id: profileId }, relations: ['auth'] });
     if (!profileFound) {
       throw new HttpException('profile not found in database!', HttpStatus.NOT_FOUND);
     }
