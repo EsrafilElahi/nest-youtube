@@ -24,12 +24,12 @@ export class ProfileController {
     return this.profileService.createProfile(profileDto);
   }
 
-  @Put('/edit/:id')
+  @Put('/:id/edit')
   updateProfile(@Param('id') id: number, @Body() profileDto: ProfileDto) {
     return this.profileService.updateProfile(id, profileDto);
   }
 
-  @Delete('/delete/:id')
+  @Delete('/:id/delete')
   deleteProfile(@Param('id') id: number) {
     return this.profileService.deleteProfile(id);
   }
