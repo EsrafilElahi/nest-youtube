@@ -1,13 +1,10 @@
 import { IsNotEmpty, IsNumber, IsString, Length } from 'class-validator';
 import { Entity, Column, PrimaryGeneratedColumn, OneToOne } from 'typeorm';
-import { AuthEntity } from './Auth.entity';
+import { AuthEntity } from './auth.entity';
+import { AbstractEntity } from './abstract.entity';
 
 @Entity()
-export class ProfileEntity {
-  @Column()
-  @PrimaryGeneratedColumn()
-  profileId: string;
-
+export class ProfileEntity extends AbstractEntity {
   @OneToOne(() => AuthEntity, (auth) => auth.profile)
   auth: AuthEntity;
 
