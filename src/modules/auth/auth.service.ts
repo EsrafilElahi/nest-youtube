@@ -4,7 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
 //* SERVICES
-import { AuthEntity } from 'src/entities/Auth.entity';
+import { AuthEntity } from 'src/entities/auth.entity';
 import { CreateUserDto } from './auth.dto';
 
 @Injectable()
@@ -19,7 +19,7 @@ export class AuthService {
   }
 
   async findUserById(id: number): Promise<AuthEntity> {
-    const user = await this.authRepository.findOne({ where: { userId: id } });
+    const user = await this.authRepository.findOne({ where: { id: id } });
     if (!user) {
       throw new HttpException('user not found!', HttpStatus.NOT_FOUND);
     } else {
@@ -43,7 +43,7 @@ export class AuthService {
       throw new HttpException('user data not found!', HttpStatus.BAD_REQUEST);
     }
 
-    const userFound = await this.authRepository.findOne({ where: { userId: id } });
+    const userFound = await this.authRepository.findOne({ where: { id: id } });
     if (!userFound) {
       throw new HttpException('user not found in database!', HttpStatus.NOT_FOUND);
     }
@@ -59,7 +59,7 @@ export class AuthService {
       throw new HttpException('user id not found!', HttpStatus.BAD_REQUEST);
     }
 
-    const userFound = await this.authRepository.findOne({ where: { userId: id } });
+    const userFound = await this.authRepository.findOne({ where: { id: id } });
     if (!userFound) {
       throw new HttpException('user not found in database!', HttpStatus.NOT_FOUND);
     }

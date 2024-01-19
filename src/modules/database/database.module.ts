@@ -1,6 +1,6 @@
 import { Global, Module } from '@nestjs/common';
 import { databaseConfig } from './database.providers';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 // t indicates that the module and its provided services will be instantiated only once and shared globally across the entire application. This can be useful when you want to create singleton services that should be reused throughout the entire application
@@ -8,7 +8,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 @Global() // make global, not need import
 @Module({
   imports: [
-    // ConfigModule.forRoot(),
     // for all pages applied
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],

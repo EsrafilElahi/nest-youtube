@@ -10,6 +10,7 @@ import { ProfileModule } from './modules/profile/profile.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { DatabaseModule } from './modules/database/database.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { DatabaseModule } from './modules/database/database.module';
       isGlobal: true,
       envFilePath: ['.env.development', '.env'], // Adjust for different environments
     }),
+
     DatabaseModule,
     ProfileModule,
     AuthModule,

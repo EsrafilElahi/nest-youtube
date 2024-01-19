@@ -1,5 +1,5 @@
 import { IsNotEmpty, IsNumber, IsString, Length } from 'class-validator';
-import { Entity, Column, PrimaryGeneratedColumn, OneToOne } from 'typeorm';
+import { Entity, Column, OneToOne } from 'typeorm';
 import { AuthEntity } from './auth.entity';
 import { AbstractEntity } from './abstract.entity';
 
