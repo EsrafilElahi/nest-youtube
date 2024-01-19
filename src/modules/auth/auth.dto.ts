@@ -4,7 +4,7 @@ import { Role } from 'src/interface/interfaces';
 export class CreateUserDto {
   @IsNotEmpty({ message: 'Email should not be empty!' })
   @IsEmail()
-  readonly email: string;
+  email: string;
 
   @IsNotEmpty({ message: 'Password should not be empty!' })
   @MinLength(6, { message: 'password length must be greater than 6' })
