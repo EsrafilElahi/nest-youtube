@@ -12,7 +12,7 @@ export class ProfileService {
     private profileRepository: Repository<ProfileEntity>,
 
     @InjectRepository(AuthEntity)
-    private aurhRepository: Repository<AuthEntity>,
+    private authRepository: Repository<AuthEntity>,
   ) {}
 
   async getProfiles() {
@@ -39,8 +39,8 @@ export class ProfileService {
 
     const createProfile = this.profileRepository.create(profileDto);
 
-    // hanlde one-to-one relation
-    const userRelated = await this.aurhRepository.findOne({ where: { id: userId }, select: { id: true, email: true, password: true, role: true } });
+    // handle one-to-one relation
+    const userRelated = await this.authRepository.findOne({ where: { id: userId }, select: { id: true, email: true, role: true } });
     if (!userRelated) {
       throw new HttpException('profile-user not found!', HttpStatus.NOT_FOUND);
     }
@@ -56,7 +56,7 @@ export class ProfileService {
     }
 
     const profileFound = await this.profileRepository.findOne({ where: { id: profileId }, relations: ['auth'] });
-    const userRelated = await this.aurhRepository.findOne({ where: { id: profileId }, select: { id: true, email: true, password: true, role: true } });
+    const userRelated = await this.authRepository.findOne({ where: { id: profileId }, select: { id: true, email: true, password: true, role: true } });
 
     if (!profileFound || !userRelated) {
       throw new HttpException('profile-user not found!', HttpStatus.NOT_FOUND);
