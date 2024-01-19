@@ -56,13 +56,10 @@ export class ProfileService {
     }
 
     const profileFound = await this.profileRepository.findOne({ where: { id: profileId }, relations: ['auth'] });
-    const userRelated = await this.authRepository.findOne({ where: { id: profileId }, select: { id: true, email: true, password: true, role: true } });
 
-    if (!profileFound || !userRelated) {
-      throw new HttpException('profile-user not found!', HttpStatus.NOT_FOUND);
+    if (!profileFound) {
+      throw new HttpException('profile not found!', HttpStatus.NOT_FOUND);
     }
-
-    profileFound.auth = userRelated;
 
     this.profileRepository.merge(profileFound, profileDto);
 
