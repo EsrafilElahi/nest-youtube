@@ -15,11 +15,6 @@ export class ProfileService {
     const profiles = await this.profileRepository.find({ relations: { auth: true } });
 
     const count = await this.profileRepository.count();
-
-    if (profiles) {
-      throw new HttpException('profiles not found!', HttpStatus.NOT_FOUND);
-    }
-
     return { count, profiles };
   }
 

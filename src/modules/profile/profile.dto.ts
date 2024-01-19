@@ -16,17 +16,18 @@ export class ProfileDto {
   phone: string;
 
   @IsString({ message: 'Bio should be a string!' })
-  bio: string;
+  bio: string = '';
 
   @IsString({ message: 'Address should be a string!' })
-  address: string;
+  address: string = '';
 
   @IsString({ message: 'Job should be a string!' })
-  job: string;
+  job: string = '';
 
   @IsString({ message: 'Avatar should be a string!' })
-  avatar: string;
+  avatar: string = '';
 
   @IsEnum(Role, { message: 'role must be valid!' })
+  @IsNotEmpty({ message: 'the role not must be empty!' })
   role: Role;
 }
