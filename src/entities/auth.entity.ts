@@ -1,9 +1,10 @@
 import { IsEmail, IsEnum, IsNotEmpty, MinLength } from 'class-validator';
-import { Entity, Column, OneToOne, JoinColumn, BeforeInsert, BeforeUpdate } from 'typeorm';
+import { Entity, Column, OneToOne, JoinColumn, BeforeInsert, BeforeUpdate, OneToMany } from 'typeorm';
 import { Role } from 'src/interface/interfaces';
 import { ProfileEntity } from './profile.entity';
 import { AbstractEntity } from './abstract.entity';
 import { hash } from 'bcryptjs';
+import { VideoEntity } from './video.entity';
 
 @Entity()
 export class AuthEntity extends AbstractEntity {
@@ -24,6 +25,10 @@ export class AuthEntity extends AbstractEntity {
   @OneToOne(() => ProfileEntity, (profile) => profile.auth)
   @JoinColumn()
   profile: ProfileEntity;
+
+  @OneToMany(() => VideoEntity, (video) => video.auth)
+  @JoinColumn()
+  videos: VideoEntity[];
 
   @BeforeInsert()
   @BeforeUpdate()

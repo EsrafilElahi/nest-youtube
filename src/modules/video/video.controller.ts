@@ -23,7 +23,7 @@ export class VideoController {
   }
 
   @Patch(':id')
-  updateVideo(@Param('id') id: string, @Body() updateVideoDto: UpdateVideoDto) {
+  updateVideo(@Param('id') id: number, @Body() updateVideoDto: UpdateVideoDto) {
     return this.videoService.updateVideo(+id, updateVideoDto);
   }
 
