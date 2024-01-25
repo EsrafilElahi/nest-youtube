@@ -34,37 +34,47 @@ export class ProfileService {
 
   async createProfileById(userId: number, profileDto: Partial<ProfileDto>) {
     if (!profileDto || !userId) {
-      throw new HttpException('user data or id not found!', HttpStatus.BAD_REQUEST);
+      throw new HttpException('User data or ID not found!', HttpStatus.BAD_REQUEST);
     }
 
-    const createProfile = this.profileRepository.create(profileDto);
+    const user = await this.authRepository.findOne({ where: { id: userId }, select: { id: true, email: true, role: true } });
 
-    // handle one-to-one relation
-    const userRelated = await this.authRepository.findOne({ where: { id: userId }, select: { id: true, email: true, role: true } });
-    if (!userRelated) {
-      throw new HttpException('profile-user not found!', HttpStatus.NOT_FOUND);
+    if (!user) {
+      throw new HttpException('User not found!', HttpStatus.NOT_FOUND);
     }
 
-    createProfile.auth = userRelated;
+    // Create a profile entity and associate it with the user
+    const createdProfile = this.profileRepository.create({
+      ...profileDto,
+      auth: user, // Set the auth property to associate the profile with the user
+    });
 
-    return await this.profileRepository.save(createProfile);
+    // Save the profile entity
+    await this.profileRepository.save(createdProfile);
+
+    // Return the created profile entity
+    return createdProfile;
   }
 
   async updateProfileById(profileId: number, profileDto: Partial<ProfileDto>) {
     if (!profileDto) {
-      throw new HttpException('profile data not found!', HttpStatus.BAD_REQUEST);
+      throw new HttpException('Profile data not found!', HttpStatus.BAD_REQUEST);
     }
 
+    // Find the profile by ID with the associated user (auth)
     const profileFound = await this.profileRepository.findOne({ where: { id: profileId }, relations: ['auth'] });
 
     if (!profileFound) {
-      throw new HttpException('profile not found!', HttpStatus.NOT_FOUND);
+      throw new HttpException('Profile not found!', HttpStatus.NOT_FOUND);
     }
 
+    // Merge the profile data with the provided DTO
     this.profileRepository.merge(profileFound, profileDto);
 
-    const upatedProfile = await this.profileRepository.save(profileFound);
-    return upatedProfile;
+    // Save the updated profile entity
+    const updatedProfile = await this.profileRepository.save(profileFound);
+
+    return updatedProfile;
   }
 
   async deleteProfileById(profileId: number) {
