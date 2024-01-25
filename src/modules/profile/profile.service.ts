@@ -32,7 +32,7 @@ export class ProfileService {
     return foundProfile;
   }
 
-  async createProfile(userId: number, profileDto: Partial<ProfileDto>) {
+  async createProfileById(userId: number, profileDto: Partial<ProfileDto>) {
     if (!profileDto || !userId) {
       throw new HttpException('user data or id not found!', HttpStatus.BAD_REQUEST);
     }
@@ -50,7 +50,7 @@ export class ProfileService {
     return await this.profileRepository.save(createProfile);
   }
 
-  async updateProfile(profileId: number, profileDto: Partial<ProfileDto>) {
+  async updateProfileById(profileId: number, profileDto: Partial<ProfileDto>) {
     if (!profileDto) {
       throw new HttpException('profile data not found!', HttpStatus.BAD_REQUEST);
     }
@@ -67,7 +67,7 @@ export class ProfileService {
     return upatedProfile;
   }
 
-  async deleteProfile(profileId: number) {
+  async deleteProfileById(profileId: number) {
     if (!profileId) {
       throw new HttpException('profile id not found!', HttpStatus.BAD_REQUEST);
     }
