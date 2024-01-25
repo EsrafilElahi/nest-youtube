@@ -1,12 +1,12 @@
 import { IsEnum, IsNotEmpty, IsNumber, IsString, MaxLength, MinLength } from 'class-validator';
-import { Entity, Column, OneToOne, JoinColumn, OneToMany } from 'typeorm';
+import { Entity, Column, OneToOne, JoinColumn, OneToMany, ManyToMany, ManyToOne } from 'typeorm';
 import { AuthEntity } from './auth.entity';
 import { AbstractEntity } from './abstract.entity';
 import { Role } from 'src/interface/interfaces';
 
 @Entity()
 export class VideoEntity extends AbstractEntity {
-  @OneToMany(() => AuthEntity, (auth) => auth.videos, { cascade: true })
+  @ManyToOne(() => AuthEntity, (auth) => auth.videos, { eager: true, cascade: true })
   auth: AuthEntity;
 
   @Column()

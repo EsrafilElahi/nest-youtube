@@ -3,10 +3,10 @@ import { VideoService } from './video.service';
 import { VideoController } from './video.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthEntity } from 'src/entities/auth.entity';
-import { ProfileEntity } from 'src/entities/profile.entity';
+import { VideoEntity } from 'src/entities/video.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([AuthEntity, ProfileEntity])],
+  imports: [TypeOrmModule.forFeature([AuthEntity, VideoEntity])],
   controllers: [VideoController],
   providers: [VideoService],
 })
