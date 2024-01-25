@@ -10,7 +10,7 @@ import { ProfileModule } from './modules/profile/profile.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { DatabaseModule } from './modules/database/database.module';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { VideoModule } from './modules/video/video.module';
 
 @Module({
   imports: [
@@ -22,6 +22,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     DatabaseModule,
     ProfileModule,
     AuthModule,
+    VideoModule,
   ],
   controllers: [AppController],
 
