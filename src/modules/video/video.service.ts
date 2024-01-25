@@ -86,13 +86,21 @@ export class VideoService {
       throw new HttpException('video not found in database', HttpStatus.NOT_FOUND);
     }
 
+    const videoUpdation = await this.videoRepository.createQueryBuilder().update(VideoEntity).set(updateVideoDto).where('id = :videoId', { videoId }).execute();
+
     // Merge the video data with the provided DTO
-    this.videoRepository.merge(foundVideo, updateVideoDto);
+    // this.videoRepository.merge(foundVideo, updateVideoDto);
 
-    // Save the updated video entity
-    const updatedVideo = await this.videoRepository.save(foundVideo);
+    // // Save the updated video entity
+    // const updatedVideo = await this.videoRepository.save(foundVideo);
 
-    return updatedVideo;
+    const updatedVideo = await this.videoRepository.find({ where: { id: videoId }, relations: ['auth'] });
+
+    if (videoUpdation?.affected === 1) {
+      return updatedVideo;
+    }
+
+    throw new HttpException('video not found in database', HttpStatus.NOT_FOUND);
   }
 
   async deleteVideo(videoId: number) {
