@@ -26,11 +26,11 @@ export class VideoService {
     }
     const userFound = await this.authRepository.findOne({ where: { id: Number(userId) }, select: { id: true, email: true, role: true } });
     if (!userFound) {
-      throw new HttpException('user not found!', HttpStatus.BAD_REQUEST);
+      throw new HttpException('user not found in database', HttpStatus.BAD_REQUEST);
     }
 
     // Create a video entity and associate it with the user
-    const createdVideo = await this.videoRepository.create({  
+    const createdVideo = await this.videoRepository.create({
       ...otherData,
       auth: userFound, // Set the auth property to associate the video with the user
     });
@@ -41,18 +41,55 @@ export class VideoService {
   }
 
   async findAllVideos() {
-    return `This action returns all video`;
+    const foundVideos = await this.videoRepository.find({ relations: ['auth'] });
+    if (!foundVideos) {
+      throw new HttpException('videos not found in database', HttpStatus.NOT_FOUND);
+    }
+
+    return foundVideos;
   }
 
-  async findOneVideo(id: number) {
-    return `This action returns a #${id} video`;
+  async findOneVideo(videoId: number) {
+    if (!videoId) {
+      throw new HttpException('profile id not found in database', HttpStatus.BAD_REQUEST);
+    }
+
+    const foundVideo = await this.videoRepository.findOne({ where: { id: videoId }, relations: ['auth'] });
+
+    if (!foundVideo) {
+      throw new HttpException('video not found in database', HttpStatus.NOT_FOUND);
+    }
+
+    return foundVideo;
   }
 
-  async updateVideo(id: number, updateVideoDto: UpdateVideoDto) {
-    return `This action updates a #${id} video`;
+  async updateVideo(videoId: number, updateVideoDto: UpdateVideoDto) {
+    const foundVideo = await this.videoRepository.findOne({ where: { id: videoId }, relations: ['auth'] });
+
+    if (!foundVideo) {
+      throw new HttpException('video not found in database', HttpStatus.NOT_FOUND);
+    }
+
+    // Merge the video data with the provided DTO
+    this.videoRepository.merge(foundVideo, updateVideoDto);
+
+    // Save the updated video entity
+    const updatedVideo = await this.videoRepository.save(foundVideo);
+
+    return updatedVideo;
   }
 
-  async deleteVideo(id: number) {
-    return `This action removes a #${id} video`;
+  async deleteVideo(videoId: number) {
+    if (!videoId) {
+      throw new HttpException('video id not found!', HttpStatus.BAD_REQUEST);
+    }
+
+    const videoFound = await this.videoRepository.findOne({ where: { id: videoId }, relations: ['auth'] });
+    if (!videoFound) {
+      throw new HttpException('video not found in database!', HttpStatus.NOT_FOUND);
+    }
+
+    await this.videoRepository.delete(videoId);
+    return { message: 'delete video successfully', deletedVideo: videoFound };
   }
 }

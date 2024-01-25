@@ -18,17 +18,17 @@ export class VideoController {
   }
 
   @Get(':id')
-  findOneVideo(@Param('id') id: string) {
-    return this.videoService.findOneVideo(+id);
+  findOneVideo(@Param('id') id: number) {
+    return this.videoService.findOneVideo(id);
   }
 
   @Patch(':id')
   updateVideo(@Param('id') id: number, @Body() updateVideoDto: UpdateVideoDto) {
-    return this.videoService.updateVideo(+id, updateVideoDto);
+    return this.videoService.updateVideo(id, updateVideoDto);
   }
 
   @Delete(':id')
-  deleteVideo(@Param('id') id: string) {
-    return this.videoService.deleteVideo(+id);
+  deleteVideo(@Param('id') id: number) {
+    return this.videoService.deleteVideo(id);
   }
 }
