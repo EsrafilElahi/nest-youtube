@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 import { Entity, Column, ManyToOne } from 'typeorm';
 import { AuthEntity } from './auth.entity';
 import { AbstractEntity } from './abstract.entity';
@@ -30,16 +30,16 @@ export class VideoEntity extends AbstractEntity {
 
   @Column()
   @IsString({ message: 'description should be a string!' })
-  @IsNotEmpty({ message: 'description should not be empty!' })
+  @IsOptional()
   description: string;
 
   @Column()
   @IsString({ message: 'url should be a string!' })
-  @IsNotEmpty({ message: 'url should not be empty!' })
+  @IsOptional()
   url: string;
 
   @Column()
   @IsNumber({}, { message: 'url should be a number!' })
-  @IsNotEmpty({ message: 'views should be number and should not be empty!' })
+  @IsOptional()
   views: number;
 }

@@ -16,14 +16,21 @@ export class ProfileService {
   ) {}
 
   async getProfiles() {
-    const profiles = await this.profileRepository.find({ relations: ['auth'] });
+    // const profiles = await this.profileRepository.find({ relations: ['auth'] });
 
-    const count = await this.profileRepository.count();
+    // const count = await this.profileRepository.count();
+
+    const profiles = await this.profileRepository.createQueryBuilder('profile').leftJoinAndSelect('profile.auth', 'authAlias').getMany();
+
+    const count = await this.profileRepository.createQueryBuilder('profile').getCount();
+
     return { count, profiles };
   }
 
   async getProfileById(id: number) {
-    const foundProfile = await this.profileRepository.findOne({ where: { id: id }, relations: ['auth'] });
+    // const foundProfile = await this.profileRepository.findOne({ where: { id: id }, relations: ['auth'] });
+
+    const foundProfile = await this.profileRepository.createQueryBuilder('profile').where('profile.id = :id', { id }).leftJoinAndSelect('profile.auth', 'authAlias').getOne();
 
     if (!foundProfile) {
       throw new HttpException('user not found!', HttpStatus.NOT_FOUND);

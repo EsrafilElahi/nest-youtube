@@ -1,4 +1,4 @@
-import { IsEnum, IsNotEmpty, IsString, MaxLength, MinLength } from 'class-validator';
+import { IsEnum, IsNotEmpty, IsOptional, IsString, MaxLength, MinLength } from 'class-validator';
 import { Entity, Column, OneToOne } from 'typeorm';
 import { AuthEntity } from './auth.entity';
 import { AbstractEntity } from './abstract.entity';
@@ -29,21 +29,26 @@ export class ProfileEntity extends AbstractEntity {
 
   @Column()
   @IsString({ message: 'Bio should be a string!' })
+  @IsOptional()
   bio: string;
 
   @Column()
   @IsString({ message: 'Address should be a string!' })
+  @IsOptional()
   address: string;
 
   @Column()
   @IsString({ message: 'Job should be a string!' })
+  @IsOptional()
   job: string;
 
   @Column()
   @IsString({ message: 'Avatar should be a string!' })
+  @IsOptional()
   avatar: string;
 
   @Column()
   @IsEnum(Role, { message: 'role must be valid!' })
+  @IsOptional()
   role: Role;
 }

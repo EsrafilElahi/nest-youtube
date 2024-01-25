@@ -15,14 +15,71 @@ export class AuthService {
   ) {}
 
   async findAllUsers() {
-    const users = await this.authRepository.find({ relations: ['profile'] });
-    const count = await this.authRepository.count();
+    // const users = await this.authRepository.find({
+    //   relations: ['profile', 'videos'],
+    //   select: ['createdAt', 'updatedAt', 'id', 'email', 'role'],
+    // });
+    // const count = await this.authRepository.count();
+
+    const users = await this.authRepository
+      .createQueryBuilder('auth')
+      .leftJoinAndSelect('auth.profile', 'profileAlias')
+      .leftJoinAndSelect('auth.videos', 'videosAlias')
+      .select([
+        'auth',
+        'videosAlias.id',
+        'videosAlias.title',
+        'videosAlias.description',
+        'videosAlias.views',
+        'videosAlias.url',
+        'profileAlias.id',
+        'profileAlias.firstName',
+        'profileAlias.lastName',
+        'profileAlias.bio',
+        'profileAlias.address',
+        'profileAlias.phone',
+        'profileAlias.job',
+        'profileAlias.avatar',
+        'profileAlias.role',
+      ])
+      .getMany();
+
+    const count = await this.authRepository.createQueryBuilder('auth').getCount();
 
     return { count, users };
   }
 
   async findUserById(id: number): Promise<AuthEntity> {
-    const user = await this.authRepository.findOne({ where: { id: id }, relations: ['profile'] });
+    // const user = await this.authRepository.findOne({
+    //   where: { id: id },
+    //   relations: ['profile', 'videos'],
+    //   select: ['createdAt', 'updatedAt', 'id', 'email', 'role'],
+    // });
+
+    const user = await this.authRepository
+      .createQueryBuilder('auth')
+      .where('auth.id = :id', { id: id })
+      .leftJoinAndSelect('auth.profile', 'profileAlias')
+      .leftJoinAndSelect('auth.videos', 'videosAlias')
+      .select([
+        'auth',
+        'videosAlias.id',
+        'videosAlias.title',
+        'videosAlias.description',
+        'videosAlias.views',
+        'videosAlias.url',
+        'profileAlias.id',
+        'profileAlias.firstName',
+        'profileAlias.lastName',
+        'profileAlias.bio',
+        'profileAlias.address',
+        'profileAlias.phone',
+        'profileAlias.job',
+        'profileAlias.avatar',
+        'profileAlias.role',
+      ])
+      .getOne();
+
     if (!user) {
       throw new HttpException('user not found!', HttpStatus.NOT_FOUND);
     } else {
@@ -37,7 +94,7 @@ export class AuthService {
 
     const createdUser = await this.authRepository.create(userDto);
     await this.authRepository.save(createdUser);
-    const allUsers = await this.authRepository.find({ select: { id: true, email: true, role: true }, relations: ['profile'] });
+    const allUsers = await this.authRepository.find({ select: { id: true, email: true, role: true }, relations: ['profile', 'videos'] });
     const count = await this.authRepository.count();
     return { count, allUsers };
   }

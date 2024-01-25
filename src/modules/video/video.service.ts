@@ -41,12 +41,22 @@ export class VideoService {
   }
 
   async findAllVideos() {
-    const foundVideos = await this.videoRepository.find({ relations: ['auth'] });
+    // const foundVideos = await this.videoRepository.find({
+    //   relations: ['auth'],
+    // });
+
+    const foundVideos = await this.videoRepository
+      .createQueryBuilder('video')
+      .leftJoinAndSelect('video.auth', 'authAlias') // 'auth' is the name of the relation in VideoEntity
+      .select(['video', 'authAlias.id', 'authAlias.email', 'authAlias.role']) // Select specific properties
+      .getMany();
+
     if (!foundVideos) {
       throw new HttpException('videos not found in database', HttpStatus.NOT_FOUND);
     }
 
-    return foundVideos;
+    const count = await this.videoRepository.count();
+    return { count, videos: foundVideos };
   }
 
   async findOneVideo(videoId: number) {
@@ -54,7 +64,13 @@ export class VideoService {
       throw new HttpException('profile id not found in database', HttpStatus.BAD_REQUEST);
     }
 
-    const foundVideo = await this.videoRepository.findOne({ where: { id: videoId }, relations: ['auth'] });
+    // const foundVideo = await this.videoRepository.findOne({ where: { id: videoId }, relations: ['auth'] });
+    const foundVideo = await this.videoRepository
+      .createQueryBuilder('video')
+      .where('video.id = :videoId', { videoId: videoId })
+      .leftJoinAndSelect('video.auth', 'authAlias')
+      .select(['video', 'authAlias.id', 'authAlias.email', 'authAlias.role']) // Select specific properties
+      .getOne();
 
     if (!foundVideo) {
       throw new HttpException('video not found in database', HttpStatus.NOT_FOUND);
