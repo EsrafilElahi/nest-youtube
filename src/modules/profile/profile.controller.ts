@@ -4,6 +4,7 @@ import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/commo
 //* SERVICES
 import { ProfileService } from './profile.service';
 import { ProfileDto } from './profile.dto';
+import { ExtractUser } from 'src/common/decorators/ExtractUser';
 
 @Controller('profile')
 export class ProfileController {
@@ -15,7 +16,8 @@ export class ProfileController {
   }
 
   @Get(':id')
-  getProfileById(@Param('id') id: number) {
+  getProfileById(@ExtractUser() user: any, @Param('id') id: number) {
+    console.log('user :', user);
     return this.profileService.getProfileById(id);
   }
 
