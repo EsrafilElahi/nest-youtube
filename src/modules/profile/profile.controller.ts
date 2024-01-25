@@ -20,17 +20,17 @@ export class ProfileController {
   }
 
   @Post(':id')
-  createProfile(@Param('id') id: number, @Body() profileDto: Partial<ProfileDto>) {
-    return this.profileService.createProfile(id, profileDto);
+  createProfileById(@Param('id') id: number, @Body() profileDto: Partial<ProfileDto>) {
+    return this.profileService.createProfileById(id, profileDto);
   }
 
   @Patch('/:id/edit')
-  updateProfile(@Param('id') id: number, @Body() profileDto: Partial<ProfileDto>) {
-    return this.profileService.updateProfile(id, profileDto);
+  updateProfileById(@Param('id') id: number, @Body() profileDto: Partial<ProfileDto>) {
+    return this.profileService.updateProfileById(id, profileDto);
   }
 
   @Delete('/:id/delete')
-  deleteProfile(@Param('id') id: number) {
-    return this.profileService.deleteProfile(id);
+  deleteProfileById(@Param('id') id: number) {
+    return this.profileService.deleteProfileById(id);
   }
 }
