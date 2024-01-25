@@ -1,12 +1,14 @@
 import { IsEnum, IsNotEmpty, IsString, MaxLength, MinLength } from 'class-validator';
-import { Entity, Column, OneToOne, JoinColumn } from 'typeorm';
+import { Entity, Column, OneToOne } from 'typeorm';
 import { AuthEntity } from './auth.entity';
 import { AbstractEntity } from './abstract.entity';
 import { Role } from 'src/interface/interfaces';
 
 @Entity()
 export class ProfileEntity extends AbstractEntity {
-  @OneToOne(() => AuthEntity, (auth) => auth.profile, { cascade: true })
+  // In TypeORM, the { eager: true } option in a @ManyToOne or @OneToOne relationship decorator is used to automatically load the related entity when querying for the owning entity. This means that when you fetch a VideoEntity, the related AuthEntity will also be loaded immediately.By default, TypeORM performs lazy loading for these relationships, which means the related entity is loaded only when accessed. However, when you set { eager: true }, TypeORM fetches the related entity along with the owning entity in a single query, reducing the need for additional queries when accessing the related entity.
+
+  @OneToOne(() => AuthEntity, (auth) => auth.profile, { eager: true, cascade: true })
   auth: AuthEntity;
 
   @Column()
