@@ -17,7 +17,7 @@ export class VideoEntity extends AbstractEntity {
   // ------------------ Witho Eager Loading (Lazy Loading): ------------------
 
   // video = await videoRepository.findOne(1, { relations: ['auth'] });
-  //auth = video.auth;
+  // auth = video.auth;
   // No additional query, as it was fetched eagerly
 
   @ManyToOne(() => AuthEntity, (auth) => auth.videos, { eager: true, cascade: true })

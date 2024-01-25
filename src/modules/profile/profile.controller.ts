@@ -21,9 +21,9 @@ export class ProfileController {
     return this.profileService.getProfileById(id);
   }
 
-  @Post(':id')
-  createProfileById(@Param('id') id: number, @Body() profileDto: Partial<ProfileDto>) {
-    return this.profileService.createProfileById(id, profileDto);
+  @Post()
+  createProfileById(@Body() profileDto: Partial<ProfileDto>) {
+    return this.profileService.createProfileById(profileDto);
   }
 
   @Patch('/:id/edit')

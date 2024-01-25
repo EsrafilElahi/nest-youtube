@@ -32,21 +32,23 @@ export class ProfileService {
     return foundProfile;
   }
 
-  async createProfileById(userId: number, profileDto: Partial<ProfileDto>) {
-    if (!profileDto || !userId) {
-      throw new HttpException('User data or ID not found!', HttpStatus.BAD_REQUEST);
+  async createProfileById(profileDto: Partial<ProfileDto>) {
+    const { userId, ...otherData } = profileDto;
+
+    if (!userId) {
+      throw new HttpException('User ID not found!', HttpStatus.BAD_REQUEST);
     }
 
-    const user = await this.authRepository.findOne({ where: { id: userId }, select: { id: true, email: true, role: true } });
+    const userFound = await this.authRepository.findOne({ where: { id: Number(userId) }, select: { id: true, email: true, role: true } });
 
-    if (!user) {
+    if (!userFound) {
       throw new HttpException('User not found!', HttpStatus.NOT_FOUND);
     }
 
     // Create a profile entity and associate it with the user
     const createdProfile = this.profileRepository.create({
-      ...profileDto,
-      auth: user, // Set the auth property to associate the profile with the user
+      ...otherData, // Use otherData instead of profileDto to exclude userId
+      auth: userFound, // Set the auth property to associate the profile with the user
     });
 
     // Save the profile entity

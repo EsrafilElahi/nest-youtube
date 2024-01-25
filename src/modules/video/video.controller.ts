@@ -22,12 +22,12 @@ export class VideoController {
     return this.videoService.findOneVideo(id);
   }
 
-  @Patch(':id')
+  @Patch('/:id/edit')
   updateVideo(@Param('id') id: number, @Body() updateVideoDto: UpdateVideoDto) {
     return this.videoService.updateVideo(id, updateVideoDto);
   }
 
-  @Delete(':id')
+  @Delete('/:id/delete')
   deleteVideo(@Param('id') id: number) {
     return this.videoService.deleteVideo(id);
   }

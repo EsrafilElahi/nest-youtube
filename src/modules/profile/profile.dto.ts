@@ -1,6 +1,7 @@
 import { Role } from 'src/interface/interfaces';
 
 export class ProfileDto {
+  userId?: string;
   firstName?: string;
   lastName?: string;
   phone?: string;
