@@ -67,3 +67,6 @@ register / registerAsync: a module that can be registered multiple times with di
     "avatar": "avatar 2",
     "role": "user"
 }
+
+
+nest generate resource <name>
