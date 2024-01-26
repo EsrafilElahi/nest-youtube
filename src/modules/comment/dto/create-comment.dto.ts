@@ -3,4 +3,5 @@ export class CreateCommentDto {
   text?: string;
   replies?: [];
   parentComment?: number | null;
+  videoId?: string;
 }

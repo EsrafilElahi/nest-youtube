@@ -6,6 +6,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { CommentEntity } from 'src/entities/comment.entity';
 import { Repository } from 'typeorm';
 import { AuthEntity } from 'src/entities/auth.entity';
+import { VideoEntity } from 'src/entities/video.entity';
 
 @Injectable()
 export class CommentService {
@@ -15,19 +16,29 @@ export class CommentService {
 
     @InjectRepository(AuthEntity)
     private authRepository: Repository<AuthEntity>,
+
+    @InjectRepository(VideoEntity)
+    private videoRepository: Repository<VideoEntity>,
   ) {}
 
   async createComment(createCommentDto: CreateCommentDto) {
-    const { userId, parentComment, ...otherData } = createCommentDto;
+    const { userId, parentComment, videoId, ...otherData } = createCommentDto;
 
     // conditions
     if (!createCommentDto) {
       throw new HttpException('comment data not found!', HttpStatus.BAD_REQUEST);
     }
 
+    // conditions -----> user
     const userFound = await this.authRepository.findOne({ where: { id: userId }, select: { id: true, email: true, role: true } });
     if (!userFound) {
       throw new HttpException('user not found in database', HttpStatus.BAD_REQUEST);
+    }
+
+    // conditions -----> video
+    const videoFound = await this.videoRepository.findOne({ where: { id: Number(videoId) } });
+    if (!videoFound) {
+      throw new HttpException('video not found in database', HttpStatus.BAD_REQUEST);
     }
 
     // =========start============ foundParentComment =====================
@@ -46,7 +57,8 @@ export class CommentService {
 
     const createdComment = this.commentRepository.create({
       ...otherData,
-      // auth: userFound, // Include auth if needed
+      auth: userFound, // Include auth if needed
+      video: videoFound, // write this too
       parentComment: foundParentComment?.id,
       replies: foundParentComment?.replies ? [...foundParentComment.replies] : [],
     });
