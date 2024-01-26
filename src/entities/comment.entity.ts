@@ -5,7 +5,7 @@ import { AbstractEntity } from './abstract.entity';
 
 @Entity()
 export class CommentEntity extends AbstractEntity {
-  @ManyToOne(() => AuthEntity, (auth) => auth.videos, { eager: true, cascade: true })
+  @ManyToOne(() => AuthEntity, (auth) => auth.comments, { eager: true, cascade: true })
   auth: AuthEntity;
 
   @Column()

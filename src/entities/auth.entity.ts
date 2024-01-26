@@ -5,6 +5,7 @@ import { ProfileEntity } from './profile.entity';
 import { AbstractEntity } from './abstract.entity';
 import { hash } from 'bcryptjs';
 import { VideoEntity } from './video.entity';
+import { CommentEntity } from './comment.entity';
 
 @Entity()
 export class AuthEntity extends AbstractEntity {
@@ -32,6 +33,11 @@ export class AuthEntity extends AbstractEntity {
   @JoinColumn()
   @IsOptional()
   videos: VideoEntity[];
+
+  @OneToMany(() => CommentEntity, (comment) => comment.auth)
+  @JoinColumn()
+  @IsOptional()
+  comments: CommentEntity[];
 
   @BeforeInsert()
   @BeforeUpdate()
