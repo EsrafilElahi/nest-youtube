@@ -12,4 +12,10 @@ export class CommentEntity extends AbstractEntity {
   @IsString({ message: 'text should be a string!' })
   @IsOptional()
   text: string;
+
+  @Column()
+  replies: CommentEntity[];
+
+  @Column()
+  parentComment: CommentEntity;
 }
