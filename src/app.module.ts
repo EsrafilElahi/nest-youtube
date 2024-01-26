@@ -23,6 +23,7 @@ import { VideoModule } from './modules/video/video.module';
     ProfileModule,
     AuthModule,
     VideoModule,
+    CommentModule,
   ],
   controllers: [AppController],
 
@@ -70,6 +71,7 @@ export class AppModule {}
 // //* LIBRARY
 // import * as JWT from 'jsonwebtoken';
 // import { PrismaService } from 'src/prisma/prisma.service';
+import { CommentModule } from './modules/comment/comment.module';
 
 // interface JWTPayload {
 //   name: string;
