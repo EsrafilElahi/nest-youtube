@@ -1,5 +1,5 @@
 import { IsOptional, IsString } from 'class-validator';
-import { Entity, Column, ManyToOne, JoinColumn, OneToMany } from 'typeorm';
+import { Entity, Column, ManyToOne, JoinColumn, OneToMany, JoinTable } from 'typeorm';
 import { AuthEntity } from './auth.entity';
 import { AbstractEntity } from './abstract.entity';
 import { VideoEntity } from './video.entity';
@@ -14,20 +14,18 @@ export class CommentEntity extends AbstractEntity {
   @IsOptional()
   text: string;
 
-  @Column()
-  @JoinColumn()
-  @OneToMany(() => CommentEntity, (comment) => comment.parentComment, { eager: true, cascade: true })
+  // here no need to { eager: true, cascade: true } beacause there is no relation external table, it's self join
+  @OneToMany(() => CommentEntity, (comment) => comment.parentComment, { lazy: true, cascade: true })
+  @JoinTable()
   replies: CommentEntity[];
 
   // Eager loading is beneficial when you know you'll always need the related data, as it reduces the number of queries by fetching everything in one go.
   // Lazy loading is useful when you want to avoid fetching unnecessary data and only load related entities when needed.
 
-  @Column()
-  @ManyToOne(() => CommentEntity, (comment) => comment.replies, { eager: true, cascade: true })
+  @ManyToOne(() => CommentEntity, (comment) => comment.replies)
   parentComment: CommentEntity;
 
-  @Column()
-  @ManyToOne(() => VideoEntity, (video) => video.comments, { eager: true, cascade: true })
+  @ManyToOne(() => VideoEntity, (video) => video.comments)
   video: VideoEntity;
 }
 

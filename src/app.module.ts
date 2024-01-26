@@ -13,7 +13,6 @@ import { DatabaseModule } from './modules/database/database.module';
 import { VideoModule } from './modules/video/video.module';
 import { CommentModule } from './modules/comment/comment.module';
 
-
 @Module({
   imports: [
     ConfigModule.forRoot({

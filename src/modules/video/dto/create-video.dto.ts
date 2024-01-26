@@ -1,5 +1,5 @@
 export class CreateVideoDto {
-  userId?: string;
+  userId?: number;
   title?: string;
   description?: string;
   url?: string;

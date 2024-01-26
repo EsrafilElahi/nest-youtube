@@ -55,7 +55,10 @@ register / registerAsync: a module that can be registered multiple times with di
 //   },
 // ],
 
-
+// * the {eager: true, cascade: true} ---> must be on one side of the relation table
+// for example : 
+// profile has {eager: true, cascade: true}
+// user must not be has -X-{eager: true, cascade: true}-X-
 
 {
     "firstName":"karzar44",

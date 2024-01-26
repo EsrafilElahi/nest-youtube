@@ -44,8 +44,6 @@ export class VideoEntity extends AbstractEntity {
   @IsOptional()
   views: number;
 
-  @Column()
   @OneToMany(() => CommentEntity, (comment) => comment.video, { eager: true, cascade: true })
-  @JoinColumn()
   comments: CommentEntity[];
 }
