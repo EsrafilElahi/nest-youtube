@@ -1,5 +1,5 @@
 import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
-import { Entity, Column, ManyToOne } from 'typeorm';
+import { Entity, Column, ManyToOne, JoinColumn, OneToMany } from 'typeorm';
 import { AuthEntity } from './auth.entity';
 import { AbstractEntity } from './abstract.entity';
 
@@ -14,8 +14,11 @@ export class CommentEntity extends AbstractEntity {
   text: string;
 
   @Column()
+  @JoinColumn()
+  @OneToMany(() => CommentEntity, (comment) => comment.parentComment, { eager: true, lazy: true, cascade: true })
   replies: CommentEntity[];
 
   @Column()
+  @ManyToOne(() => CommentEntity, (comment) => comment.replies, { eager: true, lazy: true, cascade: true })
   parentComment: CommentEntity;
 }
