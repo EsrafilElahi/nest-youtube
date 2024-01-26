@@ -39,7 +39,7 @@ export class VideoEntity extends AbstractEntity {
   @IsOptional()
   url: string;
 
-  @Column()
+  @Column({ default: 0 })
   @IsNumber({}, { message: 'url should be a number!' })
   @IsOptional()
   views: number;

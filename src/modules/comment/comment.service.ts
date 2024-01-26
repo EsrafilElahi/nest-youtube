@@ -24,36 +24,48 @@ export class CommentService {
     if (!createCommentDto) {
       throw new HttpException('comment data not found!', HttpStatus.BAD_REQUEST);
     }
-
-    const userFound = await this.authRepository.findOne({ where: { id: Number(userId) }, select: { id: true, email: true, role: true } });
+    const userFound = await this.authRepository.findOne({ where: { id: userId }, select: { id: true, email: true, role: true } });
     if (!userFound) {
       throw new HttpException('user not found in database', HttpStatus.BAD_REQUEST);
     }
 
-    const foundParentComment = await this.commentRepository.findOne({ where: { id: parentComment }, select: ['parentComment'] });
-    if (!foundParentComment) {
-      throw new HttpException('parentComment not found in database', HttpStatus.BAD_REQUEST);
-    }
+    // =========start============ foundParentComment =====================
+    let foundParentComment = null;
+    if (parentComment) {
+      foundParentComment = await this.commentRepository.findOne({ where: { id: parentComment } });
 
-    console.log('foundParentComment  :', foundParentComment);
+      if (!foundParentComment) {
+        throw new HttpException('parentComment not found in database', HttpStatus.BAD_REQUEST);
+      }
+    }
 
     const createdComment = await this.commentRepository.create({
       ...otherData,
       auth: userFound,
-      parentComment: foundParentComment,
+      parentComment: foundParentComment?.id,
+      replies: [],
     });
+
+    console.log('createdComment :', createdComment);
+    console.log('foundParentComment  :', foundParentComment);
 
     await this.commentRepository.save(createdComment);
 
-    return createdComment;
+    // Update the replies of the parent comment
+    // if (foundParentComment) {
+    //   foundParentComment.replies = [...(foundParentComment.replies || []), createdComment];
+    //   await this.commentRepository.save(foundParentComment);
+    // }
+
+    return { createdComment, foundParentComment };
   }
 
   async findAllComments() {
     const comments = await this.commentRepository
       .createQueryBuilder('comment')
-      .leftJoinAndSelect('comment.auth', 'authAlias')
+      // .leftJoinAndSelect('comment.auth', 'authAlias')
       .leftJoinAndSelect('comment.video', 'videoAlias')
-      .select(['comment', 'authAlias.id', 'authAlias.email', 'authAlias.role', 'videoAlias.id', 'videoAlias.title'])
+      // .select(['comment', 'authAlias', 'videoAlias'])
       .getMany();
 
     const count = await this.commentRepository.count();

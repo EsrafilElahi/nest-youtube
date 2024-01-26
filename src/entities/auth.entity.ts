@@ -19,7 +19,7 @@ export class AuthEntity extends AbstractEntity {
   @MinLength(6, { message: 'password length must be greater than 6' })
   password: string;
 
-  @Column()
+  @Column({ type: 'enum', enum: Role, default: Role.DEVELOPER })
   @IsEnum(Role, { message: 'role must be valid!' })
   @IsOptional()
   role: Role;
