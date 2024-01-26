@@ -11,6 +11,8 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { DatabaseModule } from './modules/database/database.module';
 import { VideoModule } from './modules/video/video.module';
+import { CommentModule } from './modules/comment/comment.module';
+
 
 @Module({
   imports: [
@@ -71,7 +73,6 @@ export class AppModule {}
 // //* LIBRARY
 // import * as JWT from 'jsonwebtoken';
 // import { PrismaService } from 'src/prisma/prisma.service';
-import { CommentModule } from './modules/comment/comment.module';
 
 // interface JWTPayload {
 //   name: string;
