@@ -1,5 +1,5 @@
 import { IsOptional, IsString } from 'class-validator';
-import { Entity, Column, ManyToOne, JoinColumn, OneToMany, JoinTable, TreeChildren, TreeParent, BeforeUpdate } from 'typeorm';
+import { Entity, Column, ManyToOne, JoinColumn, OneToMany, JoinTable, TreeChildren, TreeParent, BeforeUpdate, BeforeInsert } from 'typeorm';
 import { AuthEntity } from './auth.entity';
 import { AbstractEntity } from './abstract.entity';
 import { VideoEntity } from './video.entity';
@@ -16,6 +16,7 @@ export class CommentEntity extends AbstractEntity {
 
   // here no need to { eager: true, cascade: true } beacause there is no relation external table, it's self join
   @OneToMany(() => CommentEntity, (comment) => comment.parentComment)
+  @JoinColumn()
   replies: CommentEntity[];
 
   // Eager loading is beneficial when you know you'll always need the related data, as it reduces the number of queries by fetching everything in one go.
@@ -23,6 +24,13 @@ export class CommentEntity extends AbstractEntity {
 
   @ManyToOne(() => CommentEntity, (comment) => comment.replies)
   parentComment: CommentEntity;
+
+  @BeforeUpdate()
+  @BeforeInsert()
+  async setDefaultValue() {
+    this.replies = this.replies || [];
+    this.parentComment = this.parentComment || null;
+  }
 
   @ManyToOne(() => VideoEntity, (video) => video.comments, { onDelete: 'SET NULL' })
   video: VideoEntity;

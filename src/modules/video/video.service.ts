@@ -61,7 +61,7 @@ export class VideoService {
 
   async findOneVideo(videoId: number) {
     if (!videoId) {
-      throw new HttpException('profile id not found in database', HttpStatus.BAD_REQUEST);
+      throw new HttpException('video id not found in database', HttpStatus.BAD_REQUEST);
     }
 
     // const foundVideo = await this.videoRepository.findOne({ where: { id: videoId }, relations: ['auth'] });

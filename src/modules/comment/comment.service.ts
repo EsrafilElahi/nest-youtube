@@ -24,6 +24,7 @@ export class CommentService {
     if (!createCommentDto) {
       throw new HttpException('comment data not found!', HttpStatus.BAD_REQUEST);
     }
+
     const userFound = await this.authRepository.findOne({ where: { id: userId }, select: { id: true, email: true, role: true } });
     if (!userFound) {
       throw new HttpException('user not found in database', HttpStatus.BAD_REQUEST);
@@ -31,57 +32,106 @@ export class CommentService {
 
     // =========start============ foundParentComment =====================
     let foundParentComment = null;
+
     if (parentComment) {
-      foundParentComment = await this.commentRepository.findOne({ where: { id: parentComment } });
+      foundParentComment = await this.commentRepository.findOne({
+        where: { id: parentComment },
+        relations: ['replies', 'parentComment'],
+      });
 
       if (!foundParentComment) {
         throw new HttpException('parentComment not found in database', HttpStatus.BAD_REQUEST);
       }
     }
 
-    const createdComment = await this.commentRepository.create({
+    const createdComment = this.commentRepository.create({
       ...otherData,
-      auth: userFound,
+      // auth: userFound, // Include auth if needed
       parentComment: foundParentComment?.id,
-      replies: [],
+      replies: foundParentComment?.replies ? [...foundParentComment.replies] : [],
     });
-
-    console.log('createdComment :', createdComment);
-    console.log('foundParentComment  :', foundParentComment);
 
     await this.commentRepository.save(createdComment);
 
-    // Update the replies of the parent comment
-    // if (foundParentComment) {
-    //   foundParentComment.replies = [...(foundParentComment.replies || []), createdComment];
-    //   await this.commentRepository.save(foundParentComment);
-    // }
+    console.log('createdComment :', createdComment);
+    console.log('foundParentComment :', foundParentComment);
 
-    return { createdComment, foundParentComment };
+    return { createdComment };
   }
 
   async findAllComments() {
     const comments = await this.commentRepository
       .createQueryBuilder('comment')
-      // .leftJoinAndSelect('comment.auth', 'authAlias')
+      .leftJoinAndSelect('comment.auth', 'authAlias')
       .leftJoinAndSelect('comment.video', 'videoAlias')
-      // .select(['comment', 'authAlias', 'videoAlias'])
+      .leftJoinAndSelect('comment.replies', 'repliesAlias')
+      .leftJoinAndSelect('comment.parentComment', 'parentCommentAlias') // Include parentComment relation for the main comment
+      .leftJoinAndSelect('repliesAlias.parentComment', 'parentCommentAliasInner') // Include parentComment relation for replies
+      .leftJoinAndSelect('repliesAlias.replies', 'repliesAliasInner') // Include replies relation for replies
+      // .where('comment.replies IS EMPTY') // Start with top-level comments
+      .andWhere('repliesAlias.id IS NOT NULL') // Check if replies exist (array is not empty)
       .getMany();
+
+    // const comments = await this.commentRepository.find({ relations: ['replies'] });
 
     const count = await this.commentRepository.count();
 
     return { count, comments };
   }
 
-  findOneCommentById(id: number) {
-    return `This action returns a #${id} comment`;
+  async findOneCommentById(commentId: number) {
+    if (!commentId) {
+      throw new HttpException('comment id not found in database', HttpStatus.BAD_REQUEST);
+    }
+
+    const foundComment = await this.commentRepository
+      .createQueryBuilder('comment')
+      .where('comment.id = :commentId', { commentId })
+      .leftJoinAndSelect('comment.replies', 'repliesAlias')
+      .leftJoinAndSelect('comment.parentComment', 'parentCommentAlias')
+      .getOne();
+
+    if (!foundComment) {
+      throw new HttpException('comment not found in database', HttpStatus.NOT_FOUND);
+    }
+
+    return { foundComment };
   }
 
-  updateCommentById(id: number, updateCommentDto: UpdateCommentDto) {
-    return `This action updates a #${id} comment`;
+  async updateCommentById(commentId: number, updateCommentDto: any) {
+    const foundComment = await this.commentRepository.findOne({ where: { id: commentId }, relations: ['replies', 'parentComment'] });
+
+    if (!foundComment) {
+      throw new HttpException('comment not found in database', HttpStatus.NOT_FOUND);
+    }
+
+    const CommentUpdation = await this.commentRepository
+      .createQueryBuilder('comment')
+      .update(CommentEntity)
+      .set(updateCommentDto)
+      .where('id = :commentId', { commentId })
+      .execute();
+
+    const updatedComment = await this.commentRepository.find({ where: { id: commentId }, relations: ['replies', 'parentComment'] });
+
+    if (CommentUpdation?.affected === 1) {
+      return updatedComment;
+    }
+
+    throw new HttpException('comment not found in database', HttpStatus.NOT_FOUND);
   }
 
-  deleteCommentById(id: number) {
-    return `This action removes a #${id} comment`;
+  async deleteCommentById(commentId: number) {
+    if (!commentId) {
+      throw new HttpException('comment id not found!', HttpStatus.BAD_REQUEST);
+    }
+
+    const commentFound = await this.commentRepository.findOne({ where: { id: commentId }, relations: ['replies', 'parentComment'] });
+    if (!commentFound) {
+      throw new HttpException('comment not found in database!', HttpStatus.NOT_FOUND);
+    }
+
+    await this.commentRepository.delete(commentId);
+    return { message: 'delete comment successfully', deletedComment: commentFound };
   }
 }
