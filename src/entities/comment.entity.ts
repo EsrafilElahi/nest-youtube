@@ -11,7 +11,7 @@ export class CommentEntity extends AbstractEntity {
   @Column()
   @IsString({ message: 'text should be a string!' })
   @IsOptional()
-  text: string;
+  text: string; 
 
   @Column()
   @JoinColumn()
