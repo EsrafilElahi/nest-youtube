@@ -1,7 +1,8 @@
 import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
-import { Entity, Column, ManyToOne } from 'typeorm';
+import { Entity, Column, ManyToOne, JoinColumn, OneToMany } from 'typeorm';
 import { AuthEntity } from './auth.entity';
 import { AbstractEntity } from './abstract.entity';
+import { CommentEntity } from './comment.entity';
 
 @Entity()
 export class VideoEntity extends AbstractEntity {
@@ -42,4 +43,9 @@ export class VideoEntity extends AbstractEntity {
   @IsNumber({}, { message: 'url should be a number!' })
   @IsOptional()
   views: number;
+
+  @Column()
+  @OneToMany(() => CommentEntity, (comment) => comment.video, { eager: true, cascade: true })
+  @JoinColumn()
+  comments: CommentEntity[];
 }

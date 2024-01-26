@@ -29,12 +29,12 @@ export class AuthEntity extends AbstractEntity {
   @IsOptional()
   profile: ProfileEntity;
 
-  @OneToMany(() => VideoEntity, (video) => video.auth)
+  @OneToMany(() => VideoEntity, (video) => video.auth, { eager: true, cascade: true })
   @JoinColumn()
   @IsOptional()
   videos: VideoEntity[];
 
-  @OneToMany(() => CommentEntity, (comment) => comment.auth)
+  @OneToMany(() => CommentEntity, (comment) => comment.auth, { eager: true, cascade: true })
   @JoinColumn()
   @IsOptional()
   comments: CommentEntity[];

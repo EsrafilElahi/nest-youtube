@@ -2,6 +2,7 @@ import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 import { Entity, Column, ManyToOne, JoinColumn, OneToMany } from 'typeorm';
 import { AuthEntity } from './auth.entity';
 import { AbstractEntity } from './abstract.entity';
+import { VideoEntity } from './video.entity';
 
 @Entity()
 export class CommentEntity extends AbstractEntity {
@@ -11,7 +12,7 @@ export class CommentEntity extends AbstractEntity {
   @Column()
   @IsString({ message: 'text should be a string!' })
   @IsOptional()
-  text: string; 
+  text: string;
 
   @Column()
   @JoinColumn()
@@ -24,6 +25,10 @@ export class CommentEntity extends AbstractEntity {
   @Column()
   @ManyToOne(() => CommentEntity, (comment) => comment.replies, { eager: true, cascade: true })
   parentComment: CommentEntity;
+
+  @Column()
+  @ManyToOne(() => VideoEntity, (video) => video.comments, { eager: true, cascade: true })
+  video: VideoEntity;
 }
 
 // eager: true (Eager Loading):
