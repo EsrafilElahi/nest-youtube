@@ -7,23 +7,20 @@ import { UpdateLikeDto } from './dto/update-like.dto';
 export class LikeController {
   constructor(private readonly likeService: LikeService) {}
 
-  @Post()
-  createLike(@Body() createLikeDto: CreateLikeDto) {
-    return this.likeService.createLike(createLikeDto);
+  @Post(':userId/:entityType/:entityId/like') // userId as part of the URL
+  async like(
+    @Param('userId') userId: number, // Extract userId from URL parameter
+    @Body('isLike') isLike: boolean, // Extract isLike from request body
+    @Param('entityType') entityType: string,
+    @Param('entityId') entityId: number,
+  ): Promise<string> {
+    await this.likeService.likeOrDislike(userId, entityType, entityId, isLike);
+    return 'Liked successfully';
   }
 
-  @Get()
-  findAllUserLikes(@Body() userId: string) {
-    return this.likeService.findAllUserLikes(userId);
-  }
-
-  @Patch('/:id/edit')
-  updateVideo(@Param('id') id: number, @Body() updateVideoDto: UpdateLikeDto) {
-    return this.likeService.updateVideo(id, updateVideoDto);
-  }
-
-  @Delete('/:id/delete')
-  deleteVideo(@Param('id') id: number) {
-    return this.likeService.deleteVideo(id);
+  @Post(':entityType/:entityId/dislike')
+  async dislike(@Param('entityType') entityType: string, @Param('entityId') entityId: number): Promise<string> {
+    await this.likeService.likeOrDislike(1, entityType, entityId, false);
+    return 'Disliked successfully';
   }
 }
