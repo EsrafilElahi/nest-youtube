@@ -3,8 +3,8 @@ import { VideoService } from './like.service';
 import { CreateVideoDto } from './dto/create-like.dto';
 import { UpdateVideoDto } from './dto/update-like.dto';
 
-@Controller('video')
-export class VideoController {
+@Controller('like')
+export class LikeController {
   constructor(private readonly videoService: VideoService) {}
 
   @Post()

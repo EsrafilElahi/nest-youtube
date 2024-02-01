@@ -8,7 +8,7 @@ import { VideoEntity } from 'src/entities/video.entity';
 import { Repository } from 'typeorm';
 
 @Injectable()
-export class VideoService {
+export class LikeService {
   constructor(
     @InjectRepository(AuthEntity)
     private authRepository: Repository<AuthEntity>,
