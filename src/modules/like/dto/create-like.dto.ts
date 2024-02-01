@@ -1,4 +1,4 @@
-export class CreateVideoDto {
+export class CreateLikeDto {
   userId?: number;
   title?: string;
   description?: string;

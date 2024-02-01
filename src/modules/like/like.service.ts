@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { CreateVideoDto } from './dto/create-like.dto';
-import { UpdateVideoDto } from './dto/update-like.dto';
+import { CreateLikeDto } from './dto/create-like.dto';
+import { UpdateLikeDto } from './dto/update-like.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AuthEntity } from 'src/entities/auth.entity';
 import { VideoEntity } from 'src/entities/video.entity';
@@ -17,7 +17,7 @@ export class LikeService {
     private videoRepository: Repository<VideoEntity>,
   ) {}
 
-  async createVideo(createVideoDto: CreateVideoDto) {
+  async createVideo(createVideoDto: CreateLikeDto) {
     const { userId, ...otherData } = createVideoDto;
 
     // conditions
@@ -79,7 +79,7 @@ export class LikeService {
     return foundVideo;
   }
 
-  async updateVideo(videoId: number, updateVideoDto: UpdateVideoDto) {
+  async updateVideo(videoId: number, updateVideoDto: UpdateLikeDto) {
     const foundVideo = await this.videoRepository.findOne({ where: { id: videoId }, relations: ['auth'] });
 
     if (!foundVideo) {
