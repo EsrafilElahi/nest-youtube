@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { VideoService } from './video.service';
-import { VideoController } from './video.controller';
+import { VideoService } from './like.service';
+import { VideoController } from './like.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthEntity } from 'src/entities/auth.entity';
 import { VideoEntity } from 'src/entities/video.entity';
