@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { VideoService } from './like.service';
-import { CreateVideoDto } from './dto/create-video.dto';
-import { UpdateVideoDto } from './dto/update-video.dto';
+import { CreateVideoDto } from './dto/create-like.dto';
+import { UpdateVideoDto } from './dto/update-like.dto';
 
 @Controller('video')
 export class VideoController {

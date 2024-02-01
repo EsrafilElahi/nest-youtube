@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { CreateVideoDto } from './dto/create-video.dto';
-import { UpdateVideoDto } from './dto/update-video.dto';
+import { CreateVideoDto } from './dto/create-like.dto';
+import { UpdateVideoDto } from './dto/update-like.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AuthEntity } from 'src/entities/auth.entity';
 import { VideoEntity } from 'src/entities/video.entity';
