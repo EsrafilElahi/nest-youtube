@@ -8,18 +8,13 @@ export class LikeController {
   constructor(private readonly likeService: LikeService) {}
 
   @Post()
-  createVideo(@Body() createVideoDto: CreateLikeDto) {
-    return this.likeService.createVideo(createVideoDto);
+  createLike(@Body() createLikeDto: CreateLikeDto) {
+    return this.likeService.createLike(createLikeDto);
   }
 
   @Get()
-  findAllVideos() {
-    return this.likeService.findAllVideos();
-  }
-
-  @Get(':id')
-  findOneVideo(@Param('id') id: number) {
-    return this.likeService.findOneVideo(id);
+  findAllUserLikes(@Body() userId: string) {
+    return this.likeService.findAllUserLikes(userId);
   }
 
   @Patch('/:id/edit')

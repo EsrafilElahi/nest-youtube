@@ -3,6 +3,7 @@ import { Entity, Column, ManyToOne, JoinColumn, OneToMany } from 'typeorm';
 import { AuthEntity } from './auth.entity';
 import { AbstractEntity } from './abstract.entity';
 import { CommentEntity } from './comment.entity';
+import { LikeEntity } from './like.entity';
 
 @Entity()
 export class VideoEntity extends AbstractEntity {
@@ -46,4 +47,7 @@ export class VideoEntity extends AbstractEntity {
 
   @OneToMany(() => CommentEntity, (comment) => comment.video, { eager: true, cascade: true })
   comments: CommentEntity[];
+
+  @OneToMany(() => LikeEntity, (like) => like.video)
+  likes: LikeEntity[];
 }

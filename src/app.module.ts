@@ -12,6 +12,7 @@ import { AppService } from './app.service';
 import { DatabaseModule } from './modules/database/database.module';
 import { VideoModule } from './modules/video/video.module';
 import { CommentModule } from './modules/comment/comment.module';
+import { LikeModule } from './modules/like/like.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { CommentModule } from './modules/comment/comment.module';
     AuthModule,
     VideoModule,
     CommentModule,
+    LikeModule,
   ],
   controllers: [AppController],
 

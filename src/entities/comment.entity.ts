@@ -3,6 +3,7 @@ import { Entity, Column, ManyToOne, JoinColumn, OneToMany, JoinTable, TreeChildr
 import { AuthEntity } from './auth.entity';
 import { AbstractEntity } from './abstract.entity';
 import { VideoEntity } from './video.entity';
+import { LikeEntity } from './like.entity';
 
 @Entity()
 export class CommentEntity extends AbstractEntity {
@@ -34,6 +35,9 @@ export class CommentEntity extends AbstractEntity {
 
   @ManyToOne(() => VideoEntity, (video) => video.comments, { onDelete: 'SET NULL' })
   video: VideoEntity;
+
+  @OneToMany(() => LikeEntity, (like) => like.comment)
+  likes: LikeEntity[];
 }
 
 // eager: true (Eager Loading):

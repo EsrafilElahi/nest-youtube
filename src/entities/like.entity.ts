@@ -1,8 +1,9 @@
 import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
-import { Entity, Column, ManyToOne, JoinColumn, OneToMany } from 'typeorm';
+import { Entity, Column, ManyToOne, OneToMany, JoinColumn } from 'typeorm';
 import { AuthEntity } from './auth.entity';
 import { AbstractEntity } from './abstract.entity';
 import { CommentEntity } from './comment.entity';
+import { VideoEntity } from './video.entity';
 
 @Entity()
 export class LikeEntity extends AbstractEntity {
@@ -22,28 +23,26 @@ export class LikeEntity extends AbstractEntity {
   // No additional query, as it was fetched eagerly
 
   @ManyToOne(() => AuthEntity, (auth) => auth.videos, { eager: true, cascade: true })
+  @JoinColumn({ name: 'userId' })
   auth: AuthEntity;
 
   @Column()
-  @IsString({ message: 'title should be a string!' })
-  @IsNotEmpty({ message: 'title should not be empty!' })
-  title: string;
+  userId: number;
 
   @Column()
-  @IsString({ message: 'description should be a string!' })
-  @IsOptional()
-  description: string;
+  entityType: string; // 'video' or 'comment'
 
   @Column()
-  @IsString({ message: 'url should be a string!' })
-  @IsOptional()
-  url: string;
+  entityId: number;
 
-  @Column({ default: 0 })
-  @IsNumber({}, { message: 'url should be a number!' })
-  @IsOptional()
-  views: number;
+  @ManyToOne(() => VideoEntity, { eager: true, nullable: true })
+  // @JoinColumn({ name: 'entityId', referencedColumnName: 'id', insert: false, update: false })
+  video: VideoEntity;
 
-  @OneToMany(() => CommentEntity, (comment) => comment.video, { eager: true, cascade: true })
-  comments: CommentEntity[];
+  @ManyToOne(() => CommentEntity, { eager: true, nullable: true })
+  // @JoinColumn({ name: 'entityId', referencedColumnName: 'id', insert: false, update: false })
+  comment: CommentEntity;
+
+  @Column()
+  isLike: boolean; // true for like, false for dislike
 }
